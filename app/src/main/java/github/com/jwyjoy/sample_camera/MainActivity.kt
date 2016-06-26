@@ -25,8 +25,12 @@ class MainActivity : Activity(), SurfaceHolder.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        btn_capture.setOnClickListener {
+            camera?.autoFocus { b, camera ->
+                camera.takePicture(null, null, jpegCallback)
+            }
+        }
 
-        btn_capture.setOnClickListener { camera!!.takePicture(null, null, jpegCallback) }
 
         window.setFormat(PixelFormat.UNKNOWN)
 
@@ -68,13 +72,13 @@ class MainActivity : Activity(), SurfaceHolder.Callback {
         }
 
         try {
-            camera!!.stopPreview()
+            camera?.stopPreview()
         } catch (e: Exception) {
         }
 
         try {
-            camera!!.setPreviewDisplay(camera_view.holder)
-            camera!!.startPreview()
+            camera?.setPreviewDisplay(camera_view.holder)
+            camera?.startPreview()
         } catch (e: Exception) {
         }
 
@@ -88,16 +92,14 @@ class MainActivity : Activity(), SurfaceHolder.Callback {
         camera?.stopPreview()
         val param = camera!!.parameters
         param.setRotation(90)
-        camera!!.parameters = param
+        camera?.parameters = param
 
         try {
-            camera!!.setPreviewDisplay(camera_view.holder)
-            camera!!.startPreview()
+            camera?.setPreviewDisplay(camera_view.holder)
+            camera?.startPreview()
         } catch (e: Exception) {
-            System.err.println(e)
             return
         }
-
     }
 
     override
@@ -108,8 +110,8 @@ class MainActivity : Activity(), SurfaceHolder.Callback {
 
     override
     fun surfaceDestroyed(holder: SurfaceHolder) {
-        camera!!.stopPreview()
-        camera!!.release()
+        camera?.stopPreview()
+        camera?.release()
         camera = null
     }
 }
